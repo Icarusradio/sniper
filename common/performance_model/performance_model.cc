@@ -308,6 +308,11 @@ void PerformanceModel::iterate()
       if (!m_fastforward && m_enabled)
          handleInstruction(ins);
 
+      if (ins->instruction->getDisassembly().substr(0, 7).compare("clflush") == 0)
+      {
+         printf("[songyj@shanghaitech.edu.cn, PerformanceModel::iterate, 311] CLFLUSH instruction executed\n");
+      }
+
       delete ins;
 
       m_instruction_queue.pop();
