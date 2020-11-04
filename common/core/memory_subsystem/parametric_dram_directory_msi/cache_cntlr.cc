@@ -1421,21 +1421,21 @@ MYLOG("evicting @%lx", evict_address);
          instead of an address, and with a message to the directory at the end. Merge? */
 
       LOG_PRINT("Eviction: addr(0x%x)", evict_address);
-      if (! m_master->m_prev_cache_cntlrs.empty()) {
-         ScopedLock sl(getLock());
-         /* propagate the update to the previous levels. they will write modified data back to our evict buffer when needed */
-         m_master->m_evicting_address = evict_address;
-         m_master->m_evicting_buf = evict_buf;
+      // if (! m_master->m_prev_cache_cntlrs.empty()) {
+      //    ScopedLock sl(getLock());
+      //    /* propagate the update to the previous levels. they will write modified data back to our evict buffer when needed */
+      //    m_master->m_evicting_address = evict_address;
+      //    m_master->m_evicting_buf = evict_buf;
 
-         SubsecondTime latency = SubsecondTime::Zero();
-         for(CacheCntlrList::iterator it = m_master->m_prev_cache_cntlrs.begin(); it != m_master->m_prev_cache_cntlrs.end(); it++)
-            latency = getMax<SubsecondTime>(latency, (*it)->updateCacheBlock(evict_address, CacheState::INVALID, Transition::BACK_INVAL, NULL, thread_num).first);
-         getMemoryManager()->incrElapsedTime(latency, thread_num);
-         atomic_add_subsecondtime(stats.snoop_latency, latency);
+      //    SubsecondTime latency = SubsecondTime::Zero();
+      //    for(CacheCntlrList::iterator it = m_master->m_prev_cache_cntlrs.begin(); it != m_master->m_prev_cache_cntlrs.end(); it++)
+      //       latency = getMax<SubsecondTime>(latency, (*it)->updateCacheBlock(evict_address, CacheState::INVALID, Transition::BACK_INVAL, NULL, thread_num).first);
+      //    getMemoryManager()->incrElapsedTime(latency, thread_num);
+      //    atomic_add_subsecondtime(stats.snoop_latency, latency);
 
-         m_master->m_evicting_address = 0;
-         m_master->m_evicting_buf = NULL;
-      }
+      //    m_master->m_evicting_address = 0;
+      //    m_master->m_evicting_buf = NULL;
+      // }
 
       /* now properly get rid of the evicted line */
 
