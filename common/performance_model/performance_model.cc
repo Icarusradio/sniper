@@ -13,6 +13,9 @@
 #include "dvfs_manager.h"
 #include "instruction_tracer.h"
 #include "dynamic_instruction.h"
+#include "trace_vector.h"
+
+extern TraceVector trace_vector;
 
 PerformanceModel* PerformanceModel::create(Core* core)
 {
@@ -307,6 +310,8 @@ void PerformanceModel::iterate()
 
       if (!m_fastforward && m_enabled)
          handleInstruction(ins);
+
+      trace_vector.advanceTrace ();
 
       delete ins;
 

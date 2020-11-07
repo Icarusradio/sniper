@@ -12,6 +12,7 @@
 #include "config.hpp"
 #include "distribution.h"
 #include "topology_info.h"
+#include "trace_vector.h"
 
 #include <algorithm>
 
@@ -24,6 +25,8 @@
 #  define MYLOG(...) {}
 #endif
 
+// Use the trace vector.
+extern TraceVector trace_vector;
 
 namespace ParametricDramDirectoryMSI
 {
@@ -273,6 +276,8 @@ MemoryManager::MemoryManager(Core* core,
          Sim()->getStatsManager()->logTopology("tag-dir", core->getId(), core->getId());
       }
    }
+
+   trace_vector.initFromFile ("trace.dump", getCacheBlockSize());
 
    for(UInt32 i = MemComponent::FIRST_LEVEL_CACHE; i <= (UInt32)m_last_level_cache; ++i) {
       CacheCntlr* cache_cntlr = new CacheCntlr(

@@ -12,9 +12,6 @@ class CacheSetOPT : public CacheSet
 
       UInt32 getReplacementIndex(CacheCntlr *cntlr);
       void updateReplacementIndex(UInt32 accessed_index);
-
-   private:
-      UInt32 m_replacement_index;
 };
 
 #endif /* CACHE_SET_OPT_H */
