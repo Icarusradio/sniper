@@ -2,6 +2,7 @@
 #include "branch_predictor.h"
 #include "one_bit_branch_predictor.h"
 #include "pentium_m_branch_predictor.h"
+#include "perceptron_branch_predictor.h"
 #include "config.hpp"
 #include "stats.h"
 
@@ -46,6 +47,11 @@ BranchPredictor* BranchPredictor::create(core_id_t core_id)
       else if (type == "pentium_m")
       {
          return new PentiumMBranchPredictor("branch_predictor", core_id);
+      }
+      else if (type == "perceptron")
+      {
+         UInt32 size = cfg->getIntArray("perf_model/branch_predictor/size", core_id);
+         return new PerceptronBranchPredictor("branch_predictor", core_id, size);
       }
       else
       {
