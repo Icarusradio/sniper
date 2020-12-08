@@ -1,8 +1,5 @@
 #include "simulator.h"
 #include "perceptron_branch_predictor.h"
-#include <cassert>
-#include <iostream>
-#include <bitset>
 
 PerceptronBranchPredictor::PerceptronBranchPredictor (
   String name, core_id_t core_id, int history, int size, int bits, int theta)
