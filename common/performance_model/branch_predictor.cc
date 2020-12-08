@@ -50,11 +50,10 @@ BranchPredictor* BranchPredictor::create(core_id_t core_id)
       }
       else if (type == "perceptron")
       {
-         UInt32 history = cfg->getIntArray("perf_model/branch_predictor/history", core_id);
-         UInt32 size = cfg->getIntArray("perf_model/branch_predictor/size", core_id);
-         UInt32 bits = cfg->getIntArray("perf_model/branch_predictor/bits", core_id);
-         // UInt32 theta = cfg->getIntArray("perf_model/branch_predictor/theta", core_id);
-         UInt32 theta = (UInt32) (1.93 * history + 14);
+         int history = cfg->getIntArray("perf_model/branch_predictor/history", core_id);
+         int size = cfg->getIntArray("perf_model/branch_predictor/size", core_id);
+         int bits = cfg->getIntArray("perf_model/branch_predictor/bits", core_id);
+         int theta = cfg->getIntArray("perf_model/branch_predictor/theta", core_id);
          return new PerceptronBranchPredictor("branch_predictor", core_id, history, size, bits, theta);
       }
       else
