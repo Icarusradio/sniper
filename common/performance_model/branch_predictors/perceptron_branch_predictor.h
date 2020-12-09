@@ -20,7 +20,6 @@ public:
 private:
   int m_history;                           // history length for the global history shift register
   int m_size;                              // number of perceptrons
-  int m_bits;                              // number of bits per weight
   int m_theta;                             // threshold for training
   std::vector<perceptron> m_perceptrons;   // table of perceptrons
   int m_output;                            // the output of selected perceptron

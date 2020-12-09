@@ -6,7 +6,6 @@ PerceptronBranchPredictor::PerceptronBranchPredictor (
 : BranchPredictor(name, core_id),
   m_history (history),
   m_size (size),
-  m_bits (bits),
   m_theta (theta),
   m_perceptrons (size, perceptron (history + 1, 0)),
   m_output (0),
