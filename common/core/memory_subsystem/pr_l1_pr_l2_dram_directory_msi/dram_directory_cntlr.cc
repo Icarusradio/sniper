@@ -1075,6 +1075,13 @@ DramDirectoryCntlr::processFlushRepFromL2Cache(core_id_t sender, ShmemMsg* shmem
    MYLOG("Start @ %lx", address);
 
    DirectoryEntry* directory_entry = m_dram_directory_cache->getDirectoryEntry(address);
+
+   if (!directory_entry || !directory_entry->hasSharer(sender))
+   {
+      sendDataToDram(address, shmem_msg->getRequester(), shmem_msg->getDataBuf(), now);
+      return;
+   }
+
    assert(directory_entry);
 
    DirectoryBlockInfo* directory_block_info = directory_entry->getDirectoryBlockInfo();
