@@ -1452,14 +1452,22 @@ MYLOG("evicting @%lx", evict_address);
       }
       else if (m_next_cache_cntlr)
       {
-         if (m_cache_writethrough) {
-            /* If we're a write-through cache the new data is in the next level already */
-         } else {
-            /* Send dirty block to next level cache. Probably we have an evict/victim buffer to do that when we're idle, so ignore timing */
+         if (!m_cache_writethrough) {
+            /* Send dirty block to directory */
+            UInt32 home_node_id = getHome(evict_address);
             if (evict_block_info.getCState() == CacheState::MODIFIED)
-               m_next_cache_cntlr->writeCacheBlock(evict_address, 0, evict_buf, getCacheBlockSize(), thread_num);
+            {
+               // Send back the data also
+               MYLOG("evict FLUSH %lx", evict_address);
+               getMemoryManager()->sendMsg(PrL1PrL2DramDirectoryMSI::ShmemMsg::FLUSH_REP,
+                  m_mem_component, MemComponent::TAG_DIR,
+                  m_core_id /* requester */,
+                  home_node_id /* receiver */,
+                  evict_address,
+                  evict_buf, getCacheBlockSize(),
+                  HitWhere::UNKNOWN, &m_dummy_shmem_perf, thread_num);
+            }
          }
-         m_next_cache_cntlr->notifyPrevLevelEvict(m_core_id_master, m_mem_component, evict_address);
       }
       else if (m_master->m_dram_cntlr)
       {

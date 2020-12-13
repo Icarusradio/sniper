@@ -482,6 +482,8 @@ MYLOG("begin");
 
          switch(sender_mem_component)
          {
+            case MemComponent::L1_ICACHE:
+            case MemComponent::L1_DCACHE:
             case MemComponent::LAST_LEVEL_CACHE:
                m_dram_directory_cntlr->handleMsgFromL2Cache(sender, shmem_msg);
                break;
