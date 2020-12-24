@@ -71,7 +71,7 @@ bool pinboost_backtrace(EXCEPTION_INFO *pExceptInfo, PHYSICAL_CONTEXT *pPhysCtxt
    //                                               (void*)PIN_GetPhysicalContextReg(pPhysCtxt, LEVEL_BASE::REG_GBP)
    //);
 
-   char backtrace_filename[1024];
+   char backtrace_filename[990];
    sprintf(backtrace_filename, "/tmp/debug_backtrace_%ld.out", syscall(__NR_gettid));
 
    FILE* fp = fopen(backtrace_filename, "w");
