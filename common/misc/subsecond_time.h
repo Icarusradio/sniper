@@ -85,6 +85,9 @@ public:
 
    // Public operators
 
+   // Copy assignment operator
+   SubsecondTime& operator=(const SubsecondTime &) = default;
+
    // From http://www.stackoverflow.com/questions/4421706
    SubsecondTime& operator+=(const SubsecondTime &rhs)
    {
@@ -312,6 +315,9 @@ public:
    {
       return SubsecondTime::US_1 / m_period.m_time;
    }
+
+   // Copy assignment operator
+   ComponentPeriod& operator=(const ComponentPeriod &) = default;
 
    // From http://www.stackoverflow.com/questions/1751869
    ComponentPeriod& operator*=(uint64_t rhs)
