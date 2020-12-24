@@ -1622,10 +1622,26 @@ CacheCntlr::updateCacheBlock(IntPtr address, CacheState::cstate_t new_cstate, Tr
             /* write straight into the next level cache */
             Byte data_buf[getCacheBlockSize()];
             retrieveCacheBlock(address, data_buf, thread_num, false);
-            m_next_cache_cntlr->writeCacheBlock(address, 0, data_buf, getCacheBlockSize(), thread_num);
-            is_writeback = true;
-            sibling_hit = true;
+            SharedCacheBlockInfo* next_cache_block_info = (SharedCacheBlockInfo*) m_next_cache_cntlr->m_master->m_cache->accessSingleLine(
+               address, Cache::STORE, data_buf, getCacheBlockSize(), getShmemPerfModel()->getElapsedTime(thread_num), false);
+            if (next_cache_block_info && next_cache_block_info->getCState() == CacheState::MODIFIED) {
+               m_next_cache_cntlr->writeCacheBlock(address, 0, data_buf, getCacheBlockSize(), thread_num);
+               is_writeback = true;
+               sibling_hit = true;
+            } else {
+               m_next_cache_cntlr->updateCacheBlock(address, CacheState::INVALID, Transition::COHERENCY, NULL, thread_num);
+               UInt32 home_node_id = getHome(address);
 
+               // Send back the data also
+               MYLOG("evict FLUSH %lx", address);
+               getMemoryManager()->sendMsg(PrL1PrL2DramDirectoryMSI::ShmemMsg::FLUSH_REP,
+                  m_mem_component, MemComponent::TAG_DIR,
+                  m_core_id /* requester */,
+                  home_node_id /* receiver */,
+                  address,
+                  data_buf, getCacheBlockSize(),
+                  HitWhere::UNKNOWN, &m_dummy_shmem_perf, thread_num);
+            }
          } else if (out_buf) {
             /* someone (presumably the directory interfacing code) is waiting to consume the data */
             retrieveCacheBlock(address, out_buf, thread_num, false);
